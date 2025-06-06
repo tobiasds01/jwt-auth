@@ -4,10 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var signRouter = require('./routes/sign');
-var testRouter = require('./routes/test');
 var adminRouter = require('./routes/admin');
 var validations = require('./routes/validate-token');
 
@@ -23,11 +21,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/sign', signRouter);
-app.use('/test', validations.validateToken, testRouter);
-app.use('/admin', validations.validateToken, validations.validateAdminRole, testRouter);
+app.use('/user', validations.validateToken, usersRouter);
+app.use('/admin', validations.validateToken, validations.validateAdminRole, adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

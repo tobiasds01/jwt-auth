@@ -8,16 +8,12 @@ const {User} = require('../models');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-router.get('/', function(req, res, next) {
-  res.send('respond with a resources');
-});
-
 router.post('/register', async (req, res) => {
     try {
         const userExists = await User.findOne({where: {email: req.body.email}});
 
         if(userExists) {
-            return res.status(400).send('Email ya registrado')
+            return res.status(400).send('This email is already registered')
         } else {
             const salt = await bcrypt.genSalt(10);
             const password = await bcrypt.hash(req.body.password, salt);
@@ -28,7 +24,7 @@ router.post('/register', async (req, res) => {
                 password: password,
                 role: req.body.role
             }) 
-            return res.status(201).send('Usuario registrado')
+            return res.status(201).send('User registered')
         }
     }
     catch (error) {
@@ -39,10 +35,10 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({where: {email: req.body.email}})
-        if(!user) return res.status(404).send('Usuario no encontrado');
+        if(!user) return res.status(404).send('User not found');
         
         const validPassword = await bcrypt.compare(req.body.password, user.password)
-        if(!validPassword) return res.status(400).send('Contraseña incorrecta');
+        if(!validPassword) return res.status(400).send('Incorrect password');
         
         const token = jwt.sign({
             email: user.email,
@@ -55,7 +51,7 @@ router.post('/login', async (req, res) => {
         })
     }
     catch (error) {
-        return res.status(500).send('La consulta falló')
+        return res.status(500).send('Request failed')
     }
 });
 
