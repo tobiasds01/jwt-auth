@@ -27,13 +27,13 @@ Once a user logs in successfully, the server generates a token signed with a sec
 - User registration with hashed passwords
 - User login with email and password
 - JWT token generation
-- Role-based authorization (admin authorization for now)
+- Role-based authorization (user or admin)
 - Modular architecture (routes, controllers, models)
 
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/your-username/jwt-auth-api.git
+git clone https://github.com/tobiasds01/jwt-auth.git
 cd jwt-auth-api
 npm install
 ```
@@ -42,15 +42,14 @@ npm install
 Create a .env file in the root directory with the following variables:
 
 ```.env
-DB_USER=your_db_user
+DB_USERNAME=your_db_user
 DB_PASSWORD=your_db_password
 DB_NAME=your_db_name
-DB_HOST=localhost
-JWT_SECRET=your_jwt_secret_key
+TOKEN_SECRET=your_jwt_secret_key
 ```
 
 ## 🗄️ Database Configuration
-You can configure Sequelize in src/config/config.js or config/config.json, depending on your setup. Use sequelize-cli to run migrations if needed.
+You can configure Sequelize in src/config/config.js. Use sequelize-cli to run migrations if needed.
 
 ```bash
 npx sequelize-cli db:create
@@ -62,15 +61,29 @@ npx sequelize-cli db:migrate
 |--------|----------|-------------|
 | POST | /sign/register | Register a new user |
 | POST | /sign/login | Login and get JWT |
-| GET | /private | Access protected route (JWT required) |
+| GET | /user/ | Access protected route (JWT required) |
+| GET | /admin/ | Access protected route (JWT required, only ADMIN role) |
 
 ## 🔐 Usage Example
 After logging in and receiving a token:
 
-```http
-GET /private
-Authorization: Bearer <your_token_here>
+```Request
+GET http://localhost:3000/user/
 ```
+
+```Body
+{
+    "email": "test-email@domain.com",
+    "password": "a-password",
+    "role": "user"
+}
+```
+**Note:** possible roles: 'user' | 'admin'
+
+```Authorization: Bearer Token
+The token provided by your login
+```
+
 
 ## 📌 License
 This project is open-source and available under the MIT License.
