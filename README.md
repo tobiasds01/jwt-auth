@@ -41,7 +41,7 @@ npm install
 ## ⚙️ Environment Variables
 Create a .env file in the root directory with the following variables:
 
-```.env
+```env
 DB_USERNAME=your_db_user
 DB_PASSWORD=your_db_password
 DB_NAME=your_db_name
@@ -67,11 +67,13 @@ npx sequelize-cli db:migrate
 ## 🔐 Usage Example
 After logging in and receiving a token:
 
-```Request
+#### Request
+```sql
 GET http://localhost:3000/user/
 ```
 
-```Body
+#### Body
+```json
 {
     "email": "test-email@domain.com",
     "password": "a-password",
@@ -80,10 +82,13 @@ GET http://localhost:3000/user/
 ```
 **Note:** possible roles: 'user' | 'admin'
 
-```Authorization: Bearer Token
+#### Authorization Bearer Token
+```
 The token provided by your login
 ```
+![Request and body image](./body.png#center)
 
+![Authorization image](./auth.png)
 
 ## 📌 License
 This project is open-source and available under the MIT License.
